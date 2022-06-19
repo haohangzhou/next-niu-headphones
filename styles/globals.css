@@ -49,12 +49,12 @@ a {
 	white-space: nowrap;
 	will-change: transform;
 	-webkit-animation: marquee 15s linear infinite;
-	        animation: marquee 15s linear infinite;
+	animation: marquee 15s linear infinite;
 	width: 180%;
 }
 .track:hover {
 	-webkit-animation-play-state: paused;
-	        animation-play-state: paused;
+	animation-play-state: paused;
 }
 @-webkit-keyframes marquee {
 	from {
@@ -306,6 +306,7 @@ span.text-red {
 	font-size: 30px;
 	display: flex;
 	gap: 10px;
+	cursor: pointer;
 }
 .cart-heading {
 	display: flex;
@@ -736,7 +737,7 @@ span.text-red {
 	}
 	.track {
 		-webkit-animation: marquee 10s linear infinite;
-		        animation: marquee 10s linear infinite;
+		animation: marquee 10s linear infinite;
 		width: 550%;
 	}
 	.success-wrapper,
