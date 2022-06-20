@@ -3,26 +3,33 @@ import Product from '../../components/Product.jsx';
 import { client, urlFor } from '../../lib/client';
 import { BsStarFill, BsStarHalf } from 'react-icons/bs';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../../store/features/cart.js';
+import { useDispatch } from 'react-redux';
+import { addToCart, openCart } from '../../store/features/cart.js';
 import Link from 'next/link.js';
 
 const ProductDetail = ({ product, products }) => {
+	const dispatch = useDispatch();
 	const { name, image, details, price } = product;
-	const { cartItems } = useSelector((state) => state.cart);
+
 	// display images[index] when hover on images
 	const [selectedIndex, setSelectedIndex] = useState(0);
 
 	// quantity to add to cart
 	const [quantity, setQuantity] = useState(1);
 
-	const dispatch = useDispatch();
-
 	// add to cart
-	const handleAddToCart = (product, quantity) => {
+	const handleAddToCart = () => {
 		const productToAdd = { ...product, quantity };
-		console.log('productToAdd:', productToAdd);
 		dispatch(addToCart(productToAdd));
+	};
+
+	// Buy now functionality
+	// 1. add item to cart
+	// 2. open cart
+	const handleBuyNow = () => {
+		const productToAdd = { ...product, quantity };
+		dispatch(addToCart(productToAdd));
+		dispatch(openCart());
 	};
 
 	return (
@@ -88,10 +95,10 @@ const ProductDetail = ({ product, products }) => {
 						<button
 							type='button'
 							className='add-to-cart'
-							onClick={() => handleAddToCart(product, quantity)}>
+							onClick={handleAddToCart}>
 							Add to Cart
 						</button>
-						<button type='button' className='buy-now' onClick={() => {}}>
+						<button type='button' className='buy-now' onClick={handleBuyNow}>
 							Buy Now
 						</button>
 					</div>
