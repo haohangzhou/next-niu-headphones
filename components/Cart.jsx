@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
 	AiOutlineMinus,
 	AiOutlinePlus,
@@ -22,13 +22,24 @@ const Cart = () => {
 	const { cartItems, cartTotal } = useSelector((state) => state.cart);
 	const dispatch = useDispatch();
 
+	const cartRef = useRef();
+
 	useEffect(() => {
 		dispatch(setCartTotal());
 	}, [cartItems, dispatch]);
 
+	// close cart when click outside of cart component
+	useEffect(() => {
+		window.addEventListener('mousedown', (e) => {
+			if (cartRef.current && !cartRef.current.contains(e.target)) {
+				dispatch(closeCart());
+			}
+		});
+	}, [cartRef, dispatch]);
+
 	return (
 		<div className='cart-wrapper'>
-			<div className='cart-container'>
+			<div className='cart-container' ref={cartRef}>
 				<h3 className='cart-header'>Your Cart</h3>
 				<button
 					type='button'
@@ -41,14 +52,13 @@ const Cart = () => {
 					<div className='empty-cart'>
 						<AiOutlineShopping size={150} />
 						<h3>Your shopping bag is empty</h3>
-						<Link href='/'>
-							<button
-								type='button'
-								onClick={() => dispatch(closeCart())}
-								className='btn'>
-								Continue Shopping
-							</button>
-						</Link>
+
+						<button
+							type='button'
+							onClick={() => dispatch(closeCart())}
+							className='btn'>
+							Continue Shopping
+						</button>
 					</div>
 				)}
 
