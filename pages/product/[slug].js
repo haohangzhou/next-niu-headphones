@@ -5,6 +5,7 @@ import { BsStarFill, BsStarHalf } from 'react-icons/bs';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../store/features/cart.js';
+import Link from 'next/link.js';
 
 const ProductDetail = ({ product, products }) => {
 	const { name, image, details, price } = product;
@@ -102,7 +103,9 @@ const ProductDetail = ({ product, products }) => {
 				<div className='marquee'>
 					<div className='maylike-products-container track'>
 						{products.map((item) => (
-							<Product key={item._id} product={item} />
+							<Link key={item._id} href={`product/${item.name}`}>
+								<Product product={item} />
+							</Link>
 						))}
 					</div>
 				</div>
