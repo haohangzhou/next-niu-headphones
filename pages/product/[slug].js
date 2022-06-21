@@ -6,6 +6,7 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { addToCart, openCart } from '../../store/features/cart.js';
 import Link from 'next/link.js';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ProductDetail = ({ product, products }) => {
 	const dispatch = useDispatch();
@@ -17,10 +18,16 @@ const ProductDetail = ({ product, products }) => {
 	// quantity to add to cart
 	const [quantity, setQuantity] = useState(1);
 
+	// successful toast
+	const success = () => {
+		toast('added to cart!');
+	};
+
 	// add to cart
 	const handleAddToCart = () => {
 		const productToAdd = { ...product, quantity };
 		dispatch(addToCart(productToAdd));
+		success();
 	};
 
 	// Buy now functionality
@@ -117,6 +124,15 @@ const ProductDetail = ({ product, products }) => {
 					</div>
 				</div>
 			</div>
+			<Toaster
+				toastOptions={{
+					duration: 1500,
+					style: {
+						background: '#37B624',
+						color: '#ffffff',
+					},
+				}}
+			/>
 		</div>
 	);
 };
@@ -150,8 +166,6 @@ export const getStaticProps = async ({ params: { slug } }) => {
 
 	const product = await client.fetch(query);
 	const products = await client.fetch(allProducts);
-
-	console.log(product);
 
 	return {
 		props: { product, products },

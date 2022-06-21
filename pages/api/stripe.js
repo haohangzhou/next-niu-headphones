@@ -38,8 +38,10 @@ export default async function handler(req, res) {
 						quantity: item.quantity,
 					};
 				}),
+				// redirect to /success page after completing checkout
 				success_url: `${req.headers.origin}/success`,
-				cancel_url: `${req.headers.origin}/canceled`,
+				// redirect to home page if cancel checkout
+				cancel_url: `${req.headers.origin}/`,
 			};
 
 			const session = await stripe.checkout.sessions.create(params);

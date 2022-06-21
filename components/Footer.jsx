@@ -3,7 +3,7 @@ import { AiOutlineInstagram, AiOutlineLinkedin } from 'react-icons/ai';
 const Footer = () => {
 	return (
 		<div className='footer-container'>
-			<p>Created by Joe Zhou</p>
+			<p>Niu Headphones</p>
 			<p className='icons'>
 				<AiOutlineInstagram
 					onClick={() => window.open('https://www.instagram.com/jiu0_0/')}
