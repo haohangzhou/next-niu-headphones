@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useRef } from 'react';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import {
 	AiOutlineMinus,
 	AiOutlinePlus,
@@ -34,13 +34,15 @@ const Cart = () => {
 			method: 'post',
 			data: cartItems,
 		});
-		console.log(response);
 		if (response.statusCode === 500) return;
 
 		const { data } = await response;
 
-		toast.loading('Redirecting...');
-		stripe.redirectToCheckout({ sessionId: data.id });
+		setTimeout(() => {
+			stripe.redirectToCheckout({ sessionId: data.id });
+		}, 1500);
+
+		toast.loading('Redirecting to checkout page');
 	};
 
 	useEffect(() => {
@@ -137,6 +139,15 @@ const Cart = () => {
 					</div>
 				)}
 			</div>
+			<Toaster
+				toastOptions={{
+					duration: 1500,
+					style: {
+						background: '#37B624',
+						color: '#ffffff',
+					},
+				}}
+			/>
 		</div>
 	);
 };
