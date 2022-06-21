@@ -1,5 +1,6 @@
-import Link from 'next/link';
+import axios from 'axios';
 import { useEffect, useRef } from 'react';
+import toast from 'react-hot-toast';
 import {
 	AiOutlineMinus,
 	AiOutlinePlus,
@@ -10,6 +11,7 @@ import { TiDeleteOutline } from 'react-icons/ti';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { urlFor } from '../lib/client';
+import getStripe from '../lib/getStripe';
 import {
 	closeCart,
 	increment,
@@ -23,6 +25,25 @@ const Cart = () => {
 	const dispatch = useDispatch();
 
 	const cartRef = useRef();
+
+	const handleCheckout = async () => {
+		const stripe = await getStripe();
+
+		const response = await fetch('/api/stripe', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(cartItems),
+		});
+
+		if (response.statusCode === 500) return;
+
+		const data = await response.json();
+
+		toast.loading('Redirecting...');
+		stripe.redirectToCheckout({ sessionId: data.id });
+	};
 
 	useEffect(() => {
 		dispatch(setCartTotal());
@@ -69,6 +90,7 @@ const Cart = () => {
 								<img
 									src={urlFor(item?.image[0])}
 									className='cart-product-image'
+									alt={item.name}
 								/>
 								<div className='item-desc'>
 									<div className='flex top'>
@@ -83,9 +105,7 @@ const Cart = () => {
 													onClick={() => dispatch(decrement(item))}>
 													<AiOutlineMinus />
 												</span>
-												<span className='num' onClick=''>
-													{item.quantity}
-												</span>
+												<span className='num'>{item.quantity}</span>
 												<span
 													className='plus'
 													onClick={() => dispatch(increment(item))}>
@@ -112,7 +132,7 @@ const Cart = () => {
 							<h3>${cartTotal}</h3>
 						</div>
 						<div className='btn-container'>
-							<button type='button' className='btn' onClick={() => {}}>
+							<button type='button' className='btn' onClick={handleCheckout}>
 								Pay with Stripe
 							</button>
 						</div>
