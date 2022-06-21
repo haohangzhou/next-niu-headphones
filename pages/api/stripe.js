@@ -2,7 +2,6 @@ const stripe = require('stripe')(`${process.env.STRIPE_SECRET_KEY}`);
 
 // copied from Stripe docs
 export default async function handler(req, res) {
-	console.log(req.body.cartItems);
 	if (req.method === 'POST') {
 		try {
 			const params = {
@@ -44,7 +43,7 @@ export default async function handler(req, res) {
 			};
 
 			const session = await stripe.checkout.sessions.create(params);
-			res.status(303).json(session);
+			res.status(200).json(session);
 		} catch (err) {
 			res.status(err.statusCode || 500).json(err.message);
 		}
